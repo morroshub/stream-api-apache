@@ -88,7 +88,7 @@ def stream_data():
 # Configuración del DAG de Airflow
 with DAG('user_automation',
          default_args=default_args,
-         schedule_interval='@daily',
+         schedule='@daily',
          catchup=False) as dag:
 
 
