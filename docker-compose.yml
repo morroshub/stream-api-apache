@@ -115,7 +115,8 @@ services:
       - LOAD_EX=n
       - EXECUTOR=Sequential
       - AIRFLOW__DATABASE__SQL_ALCHEMY_CONN=postgresql+psycopg2://airflow:airflow@postgres:5432/airflow
-      - AIRFLOW__WEBSERVER__SECRET_KEY=${AIRFLOW_WEB_SERVER_SECRET_KEY:92fd31e3f8c595a59000847202ee9d9b}
+      - AIRFLOW__WEBSERVER__SECRET_KEY=${AIRFLOW_WEB_SERVER_SECRET_KEY:-92fd31e3f8c595a59000847202ee9d9b}
+
     logging:
       options:
         max-size: 10m

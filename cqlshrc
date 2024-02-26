@@ -1,0 +1,6 @@
+[authentication]
+username = cassandra
+password = cassandra
+
+# Lanzar la shell de cassandra
+# docker exec -it cassandra cqlsh --cqlshrc=./cqlshrc localhost 9042
