@@ -56,8 +56,8 @@ def stream_data():
     import time
     import logging
 
-    # Configuración del productor Kafka
-    producer = KafkaProducer(bootstrap_servers=['broker:29092'], max_block_ms=5000)
+    # Configuración del productor Kafka | # ATENCION Puertos internos
+    producer = KafkaProducer(bootstrap_servers=['broker:29092'], max_block_ms=5000) # maxblock = time out
 
     # Captura del tiempo actual para limitar la ejecución a 1 minuto
     curr_time = time.time()

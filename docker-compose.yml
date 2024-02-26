@@ -1,6 +1,7 @@
 version: '3'
 
 services:
+
   zookeeper:
       image: confluentinc/cp-zookeeper:7.4.0
       hostname: zookeeper
@@ -18,7 +19,6 @@ services:
       networks:
         - confluent
 
-# Kafka broker
   broker:
     image: confluentinc/cp-server:7.4.0
     hostname: broker
@@ -76,13 +76,7 @@ services:
       interval: 30s
       timeout: 10s
       retries: 5
-
-
-  # Control Center que es dependiente y escucha a Schema-Registry
-  
-  # Control center nos permite visualizar el straming captado por kafka que a la vez es 
-  #  gestionado por zookeeper
-
+ 
   control-center:
     image: confluentinc/cp-enterprise-control-center:7.4.0
     hostname: control-center
@@ -111,8 +105,6 @@ services:
       timeout: 10s
       retries: 5
 
-
-# Airflow 
   webserver:
     image: apache/airflow:2.6.0-python3.9
     command: webserver
@@ -123,7 +115,7 @@ services:
       - LOAD_EX=n
       - EXECUTOR=Sequential
       - AIRFLOW__DATABASE__SQL_ALCHEMY_CONN=postgresql+psycopg2://airflow:airflow@postgres:5432/airflow
-      - AIRFLOW_WEBSERVER_SECRET_KEY=this_is_a_very_secured_key
+      - AIRFLOW__WEBSERVER__SECRET_KEY=${AIRFLOW_WEB_SERVER_SECRET_KEY:92fd31e3f8c595a59000847202ee9d9b}
     logging:
       options:
         max-size: 10m
@@ -155,13 +147,11 @@ services:
       - LOAD_EX=n
       - EXECUTOR=Sequential
       - AIRFLOW__DATABASE__SQL_ALCHEMY_CONN=postgresql+psycopg2://airflow:airflow@postgres:5432/airflow
-      - AIRFLOW_WEBSERVER_SECRET_KEY=this_is_a_very_secured_key
+      - AIRFLOW_WEBSERVER_SECRET_KEY=92fd31e3f8c595a59000847202ee9d9b
     command: bash -c "pip install -r ./requirements.txt && airflow db upgrade && airflow scheduler"
     networks:
       - confluent
 
-
-#Postgres SQL
   postgres:
     image: postgres:14.0
     environment:
@@ -183,6 +173,7 @@ services:
       - "7077:7077"
     networks:
       - confluent
+
   spark-worker:
     image: bitnami/spark:latest
     command: bin/spark-class org.apache.spark.deploy.worker.Worker spark://spark-master:7077
@@ -195,9 +186,6 @@ services:
       SPARK_MASTER_URL: spark://spark-master:7077
     networks:
       - confluent
-
-
-# Cassandra DB
 
   cassandra_db:
     image: cassandra:latest
